@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>انضم لكروب | خارجيون</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: #0C2440; color: #fff; font-family: system-ui, "Segoe UI", Tahoma, sans-serif;
+    padding: 16px; box-sizing: border-box; text-align: center;
+  }
+  main { max-width: 360px; width: 100%; }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  p { color: #B8C4D4; line-height: 1.7; margin: 0 0 24px; }
+  a {
+    display: block; padding: 14px; border-radius: 12px; font-weight: 700;
+    text-decoration: none; background: #D4AF37; color: #0C2440; margin-bottom: 12px;
+  }
+  a.alt { background: transparent; color: #fff; border: 1px solid #4A6078; }
+  [hidden] { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">جاي نفتح الكروب</h1>
+  <p id="text">إذا ما انفتح التطبيق، اضغط الزر.</p>
+  <a id="open" href="#">افتح بتطبيق خارجيون</a>
+  <a id="store" class="alt" href="https://play.google.com/store/apps/details?id=com.basam.kharijoon">نزّل التطبيق</a>
+</main>
+<script>
+  const code = new URLSearchParams(location.search).get('c') || '';
+  const store = document.getElementById('store').href;
+  if (/^[0-9a-f]{10}$/.test(code)) {
+    const url = 'intent://join/' + code +
+      '#Intent;scheme=kharijoon;package=com.basam.kharijoon;S.browser_fallback_url=' +
+      encodeURIComponent(store) + ';end';
+    document.getElementById('open').href = url;
+    if (/android/i.test(navigator.userAgent)) location.href = url;
+    else document.getElementById('text').textContent = 'كروبات خارجيون تنفتح من تطبيق الأندرويد.';
+  } else {
+    document.getElementById('title').textContent = 'الرابط غير صحيح';
+    document.getElementById('text').textContent = 'اطلب من منشئ الكروب رابط جديد.';
+    document.getElementById('open').hidden = true;
+  }
+</script>
+</body>
+</html>

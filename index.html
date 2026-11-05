@@ -37,9 +37,23 @@
     const url = 'intent://join/' + code +
       '#Intent;scheme=kharijoon;package=com.basam.kharijoon;S.browser_fallback_url=' +
       encodeURIComponent(store) + ';end';
-    document.getElementById('open').href = url;
-    if (/android/i.test(navigator.userAgent)) location.href = url;
-    else document.getElementById('text').textContent = 'كروبات خارجيون تنفتح من تطبيق الأندرويد.';
+    const ua = navigator.userAgent;
+    // آيفون وآيباد (والآيباد الحديث يتنكّر بماك فيُعرف باللمس)
+    const ios = /iphone|ipad|ipod/i.test(ua) || (/macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+    if (/android/i.test(ua)) {
+      document.getElementById('open').href = url;
+      location.href = url;
+    } else if (ios) {
+      // آيفون لا يعرف intent:// — يفتح التطبيق بمخطّطه مباشرة
+      const scheme = 'kharijoon://join/' + code;
+      document.getElementById('open').href = scheme;
+      document.getElementById('store').hidden = true;
+      document.getElementById('text').textContent = 'إذا ما انفتح التطبيق، اضغط الزر. وإذا ما عندك التطبيق، نزّله من App Store.';
+      location.href = scheme;
+    } else {
+      document.getElementById('open').href = url;
+      document.getElementById('text').textContent = 'افتح الرابط من موبايلك اللي عليه تطبيق خارجيون.';
+    }
   } else {
     document.getElementById('title').textContent = 'الرابط غير صحيح';
     document.getElementById('text').textContent = 'اطلب من منشئ الكروب رابط جديد.';
